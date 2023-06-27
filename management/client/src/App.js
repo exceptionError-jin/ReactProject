@@ -9,21 +9,22 @@ import { styled } from "@mui/material/styles";
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import CustomerAdd from "./components/CustomerAdd";
 
 const styles = {
   table: {
-    minWidth: 1080 // 테이블 최소 너비 설정
+    minWidth: 1080 // 테이블 최소 너비 설정(이 크기보다 작아져도 화면 안깨짐)
   }
 };
 
 const StyledTable = styled(Table)(styles.table); // 스타일이 적용된 테이블 생성
 
-const CircularProgressWithLabel = (props) => { // 로딩 이미지
+const CircularProgressWithLabel = (props) => { // 페이지 로딩 이미지
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10)); //0.2초씩 10씩 증가
     }, 200);
 
     return () => {
@@ -67,10 +68,10 @@ const App = () => {
         // 지연을 발생시키기 위해 setTimeout을 사용하여 2초 후에 데이터를 가져옴
         setTimeout(async () => {
           const response = await fetch("http://localhost:5000/api/customers"); // 서버로부터 customers 데이터 가져오기
-          const data = await response.json(); // 응답 데이터를 JSON으로 변환
-          setCustomers(data); // customers 상태 업데이트
+          const data = await response.json(); // 가져온 데이터를 JSON으로 변환
+          setCustomers(data); // 가져온 데이터 상태 업데이트
           setIsLoading(false); // 데이터를 가져온 후에 isLoading을 false로 설정하여 CircularProgress를 숨김
-        }, 2000); // 2초의 지연 설정
+        }, 2000); // 2초 지연 설정
       } catch (error) {
         console.log(error); // 오류 발생 시 에러 로깅
         setIsLoading(false); // 오류 발생 시에도 isLoading을 false로 설정하여 CircularProgress를 숨김
@@ -81,9 +82,10 @@ const App = () => {
   }, []);
 
   return (
+    <div>
     <Paper> {/*MUI의 Paper 컴포넌트*/} 
-      <StyledTable> {/*스타일이 적용된 테이블 컴포넌트*/} 
-        <TableHead> {/*테이블 헤더*/} 
+      <StyledTable> {/*스타일이 적용된 테이블 컴포넌트*/}
+        <TableHead> {/*테이블 헤더*/}
           <TableRow> {/*테이블 헤더의 행*/} 
             <TableCell>번호</TableCell>
             <TableCell>이미지</TableCell>
@@ -93,7 +95,7 @@ const App = () => {
             <TableCell>직업</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody> {/*테이블 내용*/} 
+        <TableBody> {/*테이블 내용*/}
           {isLoading ? (
             <TableRow>
               <TableCell colSpan="6" align="center">
@@ -117,7 +119,9 @@ const App = () => {
         </TableBody>
       </StyledTable>
     </Paper>
+    <CustomerAdd/>
+    </div>
   );
 }
 
-export default App; // App 컴포넌트를 내보내기
+export default App;
