@@ -59,6 +59,7 @@ const App = () => {
   const [customers, setCustomers] = useState([]); // useState를 사용하여 리랜더링(상태관리)
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태를 관리하는 상태 변수(로딩창 보여주기 위해 사용)
 
+
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -83,10 +84,10 @@ const App = () => {
 
   return (
     <div>
-    <Paper> {/*MUI의 Paper 컴포넌트*/} 
-      <StyledTable> {/*스타일이 적용된 테이블 컴포넌트*/}
-        <TableHead> {/*테이블 헤더*/}
-          <TableRow> {/*테이블 헤더의 행*/} 
+    <Paper>
+      <StyledTable>
+        <TableHead>
+          <TableRow>
             <TableCell>번호</TableCell>
             <TableCell>이미지</TableCell>
             <TableCell>이름</TableCell>
