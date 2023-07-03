@@ -10,6 +10,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CustomerAdd from "./components/CustomerAdd";
+import CustomerDelete from "./components/CustomerDelete";
+
 
 const styles = {
   table: {
@@ -59,27 +61,26 @@ const App = () => {
   const [customers, setCustomers] = useState([]); // useState를 사용하여 리랜더링(상태관리)
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태를 관리하는 상태 변수(로딩창 보여주기 위해 사용)
 
+  const fetchCustomers = async () => {
+    try {
+      // 데이터를 가져오기 전에 isLoading을 true로 설정하여 CircularProgress를 보이게 함
+      setIsLoading(true);
+
+      // 지연을 발생시키기 위해 setTimeout을 사용하여 2초 후에 데이터를 가져옴
+      setTimeout(async () => {
+        const response = await fetch("http://localhost:5000/api/customers");// 서버로부터 customers 데이터 가져오기
+        const data = await response.json(); // 가져온 데이터를 JSON으로 변환
+        setCustomers(data);// 가져온 데이터 상태 업데이트
+        setIsLoading(false);// 데이터를 가져온 후에 isLoading을 false로 설정하여 CircularProgress를 숨김
+      }, 2000);// 2초 지연 설정
+    } catch (error) {
+      console.log(error);// 오류 발생 시 에러 로깅
+      setIsLoading(false);// 오류 발생 시에도 isLoading을 false로 설정하여 CircularProgress를 숨김
+    }
+  };
 
   useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        // 데이터를 가져오기 전에 isLoading을 true로 설정하여 CircularProgress를 보이게 함
-        setIsLoading(true);
-
-        // 지연을 발생시키기 위해 setTimeout을 사용하여 2초 후에 데이터를 가져옴
-        setTimeout(async () => {
-          const response = await fetch("http://localhost:5000/api/customers"); // 서버로부터 customers 데이터 가져오기
-          const data = await response.json(); // 가져온 데이터를 JSON으로 변환
-          setCustomers(data); // 가져온 데이터 상태 업데이트
-          setIsLoading(false); // 데이터를 가져온 후에 isLoading을 false로 설정하여 CircularProgress를 숨김
-        }, 2000); // 2초 지연 설정
-      } catch (error) {
-        console.log(error); // 오류 발생 시 에러 로깅
-        setIsLoading(false); // 오류 발생 시에도 isLoading을 false로 설정하여 CircularProgress를 숨김
-      }
-    };
-  
-    fetchCustomers(); // 컴포넌트가 마운트될 때 fetchCustomers 함수 호출
+    fetchCustomers();// 컴포넌트가 마운트될 때 fetchCustomers 함수 호출
   }, []);
 
   return (
@@ -94,9 +95,10 @@ const App = () => {
             <TableCell>생일</TableCell>
             <TableCell>성별</TableCell>
             <TableCell>직업</TableCell>
+            <TableCell>삭제</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody> {/*테이블 내용*/}
+        <TableBody>
           {isLoading ? (
             <TableRow>
               <TableCell colSpan="6" align="center">
@@ -114,6 +116,7 @@ const App = () => {
                 <TableCell>{c.birthday}</TableCell>
                 <TableCell>{c.gender}</TableCell>
                 <TableCell>{c.job}</TableCell>
+                <TableCell><CustomerDelete stateRefresh={fetchCustomers} id={c.id}/></TableCell>
               </TableRow>
             ))
           )}
