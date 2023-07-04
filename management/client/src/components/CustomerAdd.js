@@ -1,18 +1,46 @@
 import React from 'react';
 import axios from 'axios';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+
 
 class CustomerAdd extends React.Component {
-    constructor(props) { //빈값으로 만들어두기
-        super(props);
-        this.state = {
-            file: null,
-            userName: '',
-            birthday: '',
-            gender: '',
-            job: '',
-            fileName: ''
-        };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      file: null,
+      userName: '',
+      birthday: '',
+      gender: '',
+      job: '',
+      fileName: '',
+      open: false
+    };
+  }
+
+  //모달 창 열기
+  handleClickOpen = () => {
+    this.setState({
+      open: true
+    });
+  }
+
+  //모달 창 닫기
+  handleClose = () => {
+    this.setState({
+      file: null,
+      userName: '',
+      birthday: '',
+      gender: '',
+      job: '',
+      fileName: '',
+      open: false
+    })
+  }
 
     // 고객 추가 메서드
     addCustomer = () => {
@@ -129,15 +157,32 @@ class CustomerAdd extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.handleFormSubmit}>
-                <h1>고객 추가</h1>
-                프로필 이미지: <input type="file" name="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange} /><br />
-                이름: <input type="text" name="userName" value={this.state.userName} onChange={this.handleValueChange} /><br />
-                생년월일: <input type="text" name="birthday" value={this.state.birthday} onChange={this.handleValueChange} /><br />
-                성별: <input type="text" name="gender" value={this.state.gender} onChange={this.handleValueChange} /><br />
-                직업: <input type="text" name="job" value={this.state.job} onChange={this.handleValueChange} /><br />
-                <button type="submit">추가하기</button>
-            </form>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
+              고객 추가하기
+            </Button>
+            <Dialog open={this.state.open} onClose={this.handleClose} PaperProps={{style: {width: '400px'}}}>
+              <DialogTitle>고객 추가</DialogTitle>
+              <DialogContent>
+              <input style={{ display: 'none' }} accept="image/*" id="raised-button-file" type="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange} />
+
+                    <label htmlFor="raised-button-file" style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Button variant="contained" color="primary" component="span" name="file" >
+                            {this.state.fileName === "" ? "프로필 이미지 선택" : this.state.fileName}
+                        </Button>
+                    </label>
+                    <br/>
+                    <TextField label="이름" type="text" name="userName" value={this.state.userName} onChange={this.handleValueChange} style={{ display: 'flex', justifyContent: 'center' }}/><br/>
+                    <TextField label="생년월일" type="text" name="birthday" value={this.state.birthday} onChange={this.handleValueChange} style={{display: 'flex', justifyContent: 'center' }}/><br/>
+                    <TextField label="성별" type="text" name="gender" value={this.state.gender} onChange={this.handleValueChange} style={{ display: 'flex', justifyContent: 'center' }}/><br/>
+                    <TextField label="직업" type="text" name="job" value={this.state.job} onChange={this.handleValueChange} style={{display: 'flex', justifyContent: 'center' }}/><br/>
+                </DialogContent>
+                <DialogActions style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>추가</Button>
+                    <Button variant="outlined" color="primary" onClick={this.handleClose}>닫기</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
         );
     }
 }

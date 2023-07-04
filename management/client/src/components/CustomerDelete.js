@@ -2,6 +2,7 @@ import React from 'react';
 
 class CustomerDelete extends React.Component {
 
+    //아이디 삭제
     deleteCustomer(id) {
 
         const url = "http://localhost:5000/api/customers/" + id;
@@ -10,7 +11,7 @@ class CustomerDelete extends React.Component {
         });
         this.props.stateRefresh();
 
-        console.log('삭제할 고객의 ID:', id); //잘 나옴
+        console.log('삭제할 고객의 ID:', id);
     }
 
     render() {

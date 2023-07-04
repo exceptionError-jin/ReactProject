@@ -12,7 +12,6 @@ import Box from '@mui/material/Box';
 import CustomerAdd from "./components/CustomerAdd";
 import CustomerDelete from "./components/CustomerDelete";
 
-
 const styles = {
   table: {
     minWidth: 1080 // 테이블 최소 너비 설정(이 크기보다 작아져도 화면 안깨짐)
@@ -56,6 +55,8 @@ const CircularProgressWithLabel = (props) => { // 페이지 로딩 이미지
     </Box>
   );
 };
+
+
 
 const App = () => {
   const [customers, setCustomers] = useState([]); // useState를 사용하여 리랜더링(상태관리)

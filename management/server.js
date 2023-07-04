@@ -55,7 +55,7 @@ app.post('/api/customers', upload.single('image'), (req, res) => { //DB에 값 �
   );
 });
 
-app.delete('/api/customers/:id', (req, res) => {
+app.delete('/api/customers/:id', (req, res) => { //값 삭제
   let sql = 'UPDATE CUSTOMER SET isDeleted = 1 WHERE id = ?';
   let params = [req.params.id];
   connection.query(sql, params,
